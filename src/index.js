@@ -14,6 +14,6 @@
 //NOTE:the react components are pascalCased and the native html components have a small case
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./components/App"
+import App from "./components/App";
 
 ReactDOM.render(<App/>,document.getElementById("root"));
