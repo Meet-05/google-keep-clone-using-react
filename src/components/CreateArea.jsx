@@ -1,22 +1,17 @@
 import React, { useState } from "react";
+import AddIcon from "@material-ui/icons/Add";
+import Fab from "@material-ui/core/Fab";
+import Zoom from "@material-ui/core/Zoom";
 
 function CreateArea(props) {
+  const [isExpanded, setExpand] = useState(false);
+
   const [note, setNote] = useState({
     title: "",
     content: ""
   });
 
-  const [changeColor, setColor] = useState(false);
-
-  function handleOnMouseOver() {
-    setColor(true);
-  }
-
-  function handleOnMouseOut() {
-    setColor(false);
-  }
-
-  function updateNote(event) {
+  function handleChange(event) {
     const { name, value } = event.target;
 
     setNote(prevNote => {
@@ -29,34 +24,41 @@ function CreateArea(props) {
 
   function submitNote(event) {
     props.onAdd(note);
-    setNote({ title: "", content: "" });
+    setNote({
+      title: "",
+      content: ""
+    });
     event.preventDefault();
+  }
+
+  function expand() {
+    setExpand(true);
   }
 
   return (
     <div>
-      <form>
-        <input
-          value={note.title}
-          onChange={updateNote}
-          name="title"
-          placeholder="Title"
-        />
+      <form className="create-note">
+        {isExpanded ? (
+          <input
+            name="title"
+            onChange={handleChange}
+            value={note.title}
+            placeholder="Title"
+          />
+        ) : null}
         <textarea
-          value={note.content}
-          onChange={updateNote}
+          onClick={expand}
           name="content"
+          onChange={handleChange}
+          value={note.content}
           placeholder="Take a note..."
-          rows="3"
+          rows={isExpanded ? 3 : 1}
         />
-        <button
-          onMouseOver={handleOnMouseOver}
-          onMouseOut={handleOnMouseOut}
-          style={{ backgroundColor: changeColor ? "#e8505b" : null }}
-          onClick={submitNote}
-        >
-          Add
-        </button>
+        <Zoom in={isExpanded}>
+          <Fab onClick={submitNote}>
+            <AddIcon />
+          </Fab>
+        </Zoom>
       </form>
     </div>
   );
